@@ -7,7 +7,7 @@ from supervision import Detections
 from supervision.detection.utils import generate_2d_mask
 from supervision.draw.color import Color
 from supervision.draw.utils import draw_polygon, draw_text
-from supervision.geometry.core import Position
+from supervision.geometry.core import Position, Point
 from supervision.geometry.utils import get_polygon_center
 
 
