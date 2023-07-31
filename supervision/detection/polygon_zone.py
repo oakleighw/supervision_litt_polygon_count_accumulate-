@@ -95,7 +95,7 @@ class PolygonZoneAnnotator:
 
         annotated_frame = draw_text(
             scene=annotated_frame,
-            text= (f"litter: {str(self.zone.current_count)}") if label is None else label,
+            text= str(self.zone.current_count) if label is None else label,
             text_anchor=self.center,
             background_color=self.color,
             text_color=self.text_color,
