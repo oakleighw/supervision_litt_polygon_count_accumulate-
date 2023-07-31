@@ -53,24 +53,14 @@ class PolygonZone:
                 self.current_count +=1
                 continue
                 
-        # handle detection within polygon
+        # handle detection already seen
             if self.tracker_state.get(tracker_id) == tracker_state:
                 continue
     
             self.tracker_state[tracker_id] = tracker_state
-            #if tracker_state:
-            #self.current_count +=1
-            # anchors = (
-            #     np.ceil(
-            #         detections.get_anchor_coordinates(anchor=self.triggering_position)
-            #     ).astype(int)
-            #     - 1
-            # )
+
 
         
-        #this counts how many in zone... need to count how many TRACKS are in zone
-        
-        #self.current_count = int(np.sum(is_in_zone))
         return is_in_zone.astype(bool)
 
 
