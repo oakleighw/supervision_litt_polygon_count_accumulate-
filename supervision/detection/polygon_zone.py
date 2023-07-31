@@ -38,7 +38,7 @@ class PolygonZone:
         triggers = self.mask[anchors[:, 1], anchors[:, 0]]
         
         if len(set(triggers)) == 2:
-                continue
+            continue
 
         tracker_state = triggers[0]
 
