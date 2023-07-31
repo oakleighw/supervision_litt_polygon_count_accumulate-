@@ -35,7 +35,7 @@ class PolygonZone:
             anchors = [
             Point(x=(x1+x2)/2, y=(y1+y2)/2),
         ]
-        triggers = self.mask[anchors[:, 1], anchors[:, 0]]
+            triggers = self.mask[anchors[:, 1], anchors[:, 0]]
         
             if len(set(triggers)) == 2:
                 continue
