@@ -37,29 +37,29 @@ class PolygonZone:
         ]
         triggers = self.mask[anchors[:, 1], anchors[:, 0]]
         
-        if len(set(triggers)) == 2:
-            continue
-
-        tracker_state = triggers[0]
-
-     # handle new detection
-        if tracker_id not in self.tracker_state:
+            if len(set(triggers)) == 2:
+                continue
+    
+            tracker_state = triggers[0]
+    
+         # handle new detection
+            if tracker_id not in self.tracker_state:
+                self.tracker_state[tracker_id] = tracker_state
+                continue
+                
+        # handle detection within polygon
+            if self.tracker_state.get(tracker_id) == tracker_state:
+                continue
+    
             self.tracker_state[tracker_id] = tracker_state
-            continue
-            
-    # handle detection within polygon
-        if self.tracker_state.get(tracker_id) == tracker_state:
-            continue
-
-        self.tracker_state[tracker_id] = tracker_state
-        if tracker_state:
-            self.current_count +=1
-        # anchors = (
-        #     np.ceil(
-        #         detections.get_anchor_coordinates(anchor=self.triggering_position)
-        #     ).astype(int)
-        #     - 1
-        # )
+            if tracker_state:
+                self.current_count +=1
+            # anchors = (
+            #     np.ceil(
+            #         detections.get_anchor_coordinates(anchor=self.triggering_position)
+            #     ).astype(int)
+            #     - 1
+            # )
 
         
         
