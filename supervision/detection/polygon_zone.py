@@ -16,7 +16,7 @@ class PolygonZone:
         self,
         polygon: np.ndarray,
         frame_resolution_wh: Tuple[int, int],
-        triggering_position: Position = Position.BOTTOM_CENTER,
+        triggering_position: Position = Position.CENTER,
     ):
         self.polygon = polygon
         self.tracker_state: Dict[str, bool] = {}
@@ -26,21 +26,26 @@ class PolygonZone:
         self.current_count = 0
 
     def trigger(self, detections: Detections) -> np.ndarray:
+
+        #supervision code for getting centre of bounding box
+        anchors = (
+            np.ceil(
+                detections.get_anchor_coordinates(anchor=self.triggering_position)
+            ).astype(int)
+            - 1
+        )
+        is_in_zone = self.mask[anchors[:, 1], anchors[:, 0]]
+
+        #updated code following to check if TRACK is in polygon(for counting)
+        ind = 0 # keeps track of bool index
         for xyxy, confidence, class_id, tracker_id in detections:
+            in_zone_id = ind
+            ind+=1
             # handle detections with no tracker_id
             if tracker_id is None:
                 continue
-
-            x1, y1, x2, y2 = xyxy
-            anchors = [
-            Point(x=(x1+x2)/2, y=(y1+y2)/2),
-        ]
-            triggers = self.mask[anchors[:, 1], anchors[:, 0]]
-        
-            if len(set(triggers)) == 2:
-                continue
     
-            tracker_state = triggers[0]
+            tracker_state = is_in_zone[in_zone_id] # check if track in mask (estabished previously)
     
          # handle new detection
             if tracker_id not in self.tracker_state:
@@ -62,6 +67,7 @@ class PolygonZone:
             # )
 
         
+        #this counts how many in zone... need to count how many TRACKS are in zone
         
         #self.current_count = int(np.sum(is_in_zone))
         return is_in_zone.astype(bool)
