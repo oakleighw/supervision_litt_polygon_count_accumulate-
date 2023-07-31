@@ -71,7 +71,7 @@ class PolygonZoneAnnotator:
         color: Color,
         thickness: int = 2,
         text_color: Color = Color.black(),
-        text_scale: float = 0.5,
+        text_scale: float = 0.1, #OG 0.5
         text_thickness: int = 1,
         text_padding: int = 10,
     ):
