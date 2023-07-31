@@ -57,8 +57,8 @@ class PolygonZone:
                 continue
     
             self.tracker_state[tracker_id] = tracker_state
-            if tracker_state:
-                self.current_count +=1
+            #if tracker_state:
+            self.current_count +=1
             # anchors = (
             #     np.ceil(
             #         detections.get_anchor_coordinates(anchor=self.triggering_position)
