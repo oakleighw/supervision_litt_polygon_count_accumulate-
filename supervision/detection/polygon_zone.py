@@ -19,20 +19,51 @@ class PolygonZone:
         triggering_position: Position = Position.BOTTOM_CENTER,
     ):
         self.polygon = polygon
+        self.tracker_state: Dict[str, bool] = {}
         self.frame_resolution_wh = frame_resolution_wh
         self.triggering_position = triggering_position
         self.mask = generate_2d_mask(polygon=polygon, resolution_wh=frame_resolution_wh)
         self.current_count = 0
 
     def trigger(self, detections: Detections) -> np.ndarray:
-        anchors = (
-            np.ceil(
-                detections.get_anchor_coordinates(anchor=self.triggering_position)
-            ).astype(int)
-            - 1
-        )
-        is_in_zone = self.mask[anchors[:, 1], anchors[:, 0]]
-        self.current_count = int(np.sum(is_in_zone))
+        for xyxy, confidence, class_id, tracker_id in detections:
+            # handle detections with no tracker_id
+            if tracker_id is None:
+                continue
+
+            x1, y1, x2, y2 = xyxy
+            anchors = [
+            Point(x=(x1+x2)/2, y=(y1+y2)/2),
+        ]
+        triggers = self.mask[anchors[:, 1], anchors[:, 0]]
+        
+        if len(set(triggers)) == 2:
+                continue
+
+        tracker_state = triggers[0]
+
+     # handle new detection
+        if tracker_id not in self.tracker_state:
+            self.tracker_state[tracker_id] = tracker_state
+            continue
+            
+    # handle detection within polygon
+        if self.tracker_state.get(tracker_id) == tracker_state:
+            continue
+
+        self.tracker_state[tracker_id] = tracker_state
+        if tracker_state:
+            self.current_count +=1
+        # anchors = (
+        #     np.ceil(
+        #         detections.get_anchor_coordinates(anchor=self.triggering_position)
+        #     ).astype(int)
+        #     - 1
+        # )
+
+        
+        
+        #self.current_count = int(np.sum(is_in_zone))
         return is_in_zone.astype(bool)
 
 
