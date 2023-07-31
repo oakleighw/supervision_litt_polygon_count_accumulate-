@@ -32,7 +32,7 @@ class PolygonZone:
             - 1
         )
         is_in_zone = self.mask[anchors[:, 1], anchors[:, 0]]
-        self.current_count = np.sum(is_in_zone)
+        self.current_count = int(np.sum(is_in_zone))
         return is_in_zone.astype(bool)
 
 
@@ -67,7 +67,7 @@ class PolygonZoneAnnotator:
 
         annotated_frame = draw_text(
             scene=annotated_frame,
-            text=str(self.zone.current_count) if label is None else label,
+            text= (f"litter: {str(self.zone.current_count)}") if label is None else label,
             text_anchor=self.center,
             background_color=self.color,
             text_color=self.text_color,
